@@ -67,6 +67,10 @@ Custom property | Description | Default
         margin-left: 29px;
       }
 
+      :host .highlight {
+        background-color: #fefcd2;
+      }
+
       :host mdb-search-box {
         padding-top: 20px;
         padding-bottom: 20px;
@@ -123,7 +127,7 @@ Custom property | Description | Default
         <template is="dom-if" if="[[facets.length]]">
           <template is="dom-repeat" items="{{facets}}">
             <div class="facet">
-              [[item.label]] ([[item.relevance]]%)
+              <span class$="{{getRowHighlightClass(item.assessment)}}">[[item.label]] ([[item.relevance]]%)</span>
               <mdb-radio-list size="small" data-facet$="[[item.label]]" selected="{{item.assessment}}" on-paper-radio-group-changed="_facetRecommendationChanged">
                 <paper-radio-button name="Y" title="YES">
                   &#x2713;
@@ -181,6 +185,13 @@ Custom property | Description | Default
 
       _getPlaceholder: function (type) {
         return (type || '').toLowerCase();
+      },
+
+      getRowHighlightClass: function(assessment){
+        if (assessment && assessment == "M"){
+          return 'highlight';
+        }
+        return '';
       },
 
       _facetRecommendationChanged: function (e) {
