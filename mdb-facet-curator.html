@@ -160,17 +160,17 @@ Custom property | Description | Default
           type: String,
           value: ''
         },
-
+        /** possible values: maybe, all, yes, no */
         filterBy: {
           type: String,
           value: 'maybe',
-          notify: true
+          reflectToAttribute: true
         },
-
+        /** possible values: alphabetical, probability */
         sortBy: {
           type: String,
           value: 'alphabetical',
-          notify: true
+          reflectToAttribute: true
         },
 
         facets: {
