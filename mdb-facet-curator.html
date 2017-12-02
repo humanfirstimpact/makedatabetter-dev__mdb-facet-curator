@@ -1,0 +1,215 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../mdb-title/mdb-title.html">
+<link rel="import" href="../mdb-radio-list/mdb-radio-list.html">
+<link rel="import" href="../mdb-search-box/mdb-search-box.html">
+<link rel="import" href="../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-styles/typography.html">
+
+<!--
+`mdb-facet-curator`
+
+### Styling
+
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--mdb-facet-container` | Mixin applied to each facet row | `{}`
+`--mdb-facet-list-container` | Mixin applied to facet list container | `{}`
+
+@demo demo/index.html 
+-->
+
+<dom-module id="mdb-facet-curator">
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: var(--standard-padding, 20px);
+        --paper-checkbox-label-color: var(--mdb-secondary-text-dark, #000);
+        @apply(--paper-font-common-base);
+      }
+
+      :host .facet {
+        margin-top: calc(var(--standard-padding, 20px)/2);
+        @apply(--layout);
+        @apply(--layout-justified);
+        @apply(--mdb-facet-container);
+        color: var(--mdb-secondary-text-dark, #000);
+      }
+
+      :host .facet-list {
+        overflow: auto;
+        @apply(--mdb-facet-list-container);
+      }
+
+      :host .curator-container {
+        border: 1px solid #e3e9ef;
+      }
+
+      :host .action-bar {
+        border-bottom: 1px solid #e3e9ef;
+        padding-left: 15px;
+        height: 46px;
+      }
+
+      :host .action-item {
+        display: inline;
+        position: relative;
+        top: 32%;
+        margin-right: 5px;
+      }
+
+      :host .seperator {
+        margin-left: 29px;
+      }
+
+      :host mdb-search-box {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        --mdb-search-box-container: {
+          margin: 0;
+        }
+      }
+
+      :host mdb-radio-list iron-icon {
+        --iron-icon-width: 18px;
+        --iron-icon-height: 18px;
+      }
+
+      :host paper-radio-button {
+        display: inline;
+      }
+
+      :host mdb-radio-list {
+        display: inline;
+      }
+    </style>
+    <div class="curator-container">
+      <div class="action-bar">
+        <div class="action-item">Show</div>
+        <div class="action-item">
+          <mdb-radio-list size="small" selected="{{filterBy}}" on-paper-radio-group-changed="_facetFilterChanged">
+            <paper-radio-button name="maybe" title="MAYBE">
+              MAYBE
+            </paper-radio-button>
+            <paper-radio-button name="all" title="ALL">
+              ALL
+            </paper-radio-button>
+            <paper-radio-button name="yes" title="YES">
+              YES
+            </paper-radio-button>
+            <paper-radio-button name="no" title="NO">
+              NO
+            </paper-radio-button>
+          </mdb-radio-list>
+        </div>
+        <div class="action-item seperator">Sort by</div>
+        <div class="action-item">
+          <mdb-radio-list size="small" selected="{{sortBy}}" on-paper-radio-group-changed="_facetSortChanged">
+            <paper-radio-button name="alphabetical" title="ALPHABETICAL">
+              ALPHABETICAL
+            </paper-radio-button>
+            <paper-radio-button name="probability" title="PROBABILITY">
+              PROBABILITY
+            </paper-radio-button>
+          </mdb-radio-list>
+        </div>
+      </div>
+      <div class="facet-list">
+        <template is="dom-if" if="[[facets.length]]">
+          <template is="dom-repeat" items="{{facets}}">
+            <div class="facet">
+              [[item.label]] ([[item.relevance]]%)
+              <mdb-radio-list size="small" data-facet$="[[item.label]]" selected="{{item.assessment}}" on-paper-radio-group-changed="_facetRecommendationChanged">
+                <paper-radio-button name="Y" title="YES">
+                  &#x2713;
+                </paper-radio-button>
+                <paper-radio-button name="N" title="NO">
+                  &#x2717;
+                </paper-radio-button>
+                <paper-radio-button name="M" title="MAYBE">
+                  ?
+                </paper-radio-button>
+              </mdb-radio-list>
+            </div>
+          </template>
+        </template>
+        <template is="dom-if" if="[[!facets.length]]">
+          <p>No [[_getPlaceholder(facetType)]] found.</p>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'mdb-facet-curator',
+
+      properties: {
+        facetType: {
+          type: String,
+          value: ''
+        },
+
+        helpText: {
+          type: String,
+          value: ''
+        },
+
+        filterBy: {
+          type: String,
+          value: 'maybe',
+          notify: true
+        },
+
+        sortBy: {
+          type: String,
+          value: 'alphabetical',
+          notify: true
+        },
+
+        facets: {
+          type: Array,
+          value: []
+        }
+      },
+
+      _getPlaceholder: function (type) {
+        return (type || '').toLowerCase();
+      },
+
+      _facetRecommendationChanged: function (e) {
+        var facet = e.currentTarget.attributes.getNamedItem('data-facet').value;
+        this.fire('facet-recommendation-changed', {
+          facet: facet,
+          assessment: e.currentTarget.selected
+        });
+      },
+
+      _facetFilterChanged: function (e) {
+        this.fire('facet-filter-changed', {
+          filter: e.currentTarget.selected
+        });
+      },
+
+      _facetSortChanged: function (e) {
+        this.fire('facet-sort-changed', {
+          filter: e.currentTarget.selected
+        });
+      },
+
+      _facetSelectionChanged: function (e) {
+        this.fire('facet-selection-changed', {
+          facet: e.model.get('item'),
+          checked: e.currentTarget.checked,
+          facetType: this.facetType
+        });
+      }
+    });
+  </script>
+</dom-module>
