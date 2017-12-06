@@ -131,7 +131,7 @@ Custom property | Description | Default
           <template is="dom-repeat" items="{{facets}}">
             <div class$="{{getRowHighlightClass(item.assessment)}}">
               <span>[[item.label]] ([[item.relevance]]%)</span>
-              <mdb-radio-list size="small" data-facet$="[[item.label]]" selected="{{item.assessment}}" on-paper-radio-group-changed="_facetRecommendationChanged">
+              <mdb-radio-list size="small" data-facet-id$="[[item.id]]" data-facet$="[[item.label]]" selected="{{item.assessment}}" on-paper-radio-group-changed="_facetRecommendationChanged">
                 <paper-radio-button name="Y" title="YES">
                   &#x2713;
                 </paper-radio-button>
@@ -199,9 +199,12 @@ Custom property | Description | Default
 
       _facetRecommendationChanged: function (e) {
         var facet = e.currentTarget.attributes.getNamedItem('data-facet').value;
+        var facetId = e.currentTarget.attributes.getNamedItem('data-facet-id').value;
         this.fire('facet-recommendation-changed', {
           facet: facet,
-          assessment: e.currentTarget.selected
+          assessment: e.currentTarget.selected,
+          facetType: this.facetType,
+          facetId: facetId
         });
       },
 
