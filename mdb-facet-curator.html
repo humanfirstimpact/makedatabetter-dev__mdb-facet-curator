@@ -176,7 +176,7 @@ Custom property | Description | Default
         /** possible values: alphabetical, probability */
         sortBy: {
           type: String,
-          value: 'alphabetical',
+          //value: 'alphabetical',
           reflectToAttribute: true
         },
 
@@ -210,13 +210,15 @@ Custom property | Description | Default
 
       _facetFilterChanged: function (e) {
         this.fire('facet-filter-changed', {
-          filter: e.currentTarget.selected
+          filter: e.currentTarget.selected,
+          facetType: this.facetType
         });
       },
 
       _facetSortChanged: function (e) {
         this.fire('facet-sort-changed', {
-          filter: e.currentTarget.selected
+          filter: e.currentTarget.selected,
+          facetType: this.facetType
         });
       },
 
