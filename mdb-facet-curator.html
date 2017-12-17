@@ -131,7 +131,7 @@ Custom property | Description | Default
           <template is="dom-repeat" items="{{facets}}">
             <div class$="{{getRowHighlightClass(item.assessment)}}">
               <span>[[item.label]] ([[item.relevance]]%)</span>
-              <mdb-radio-list size="small" data-facet-id$="[[item.id]]" data-facet$="[[item.label]]" selected="{{item.assessment}}" on-paper-radio-group-changed="_facetRecommendationChanged">
+              <mdb-radio-list size="small" data-facet-id$="[[item.id]]" data-facet$="[[item.label]]" selected="[[item.assessment]]" on-paper-radio-group-changed="_facetRecommendationChanged">
                 <paper-radio-button name="Y" title="YES">
                   &#x2713;
                 </paper-radio-button>
