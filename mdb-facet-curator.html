@@ -99,6 +99,7 @@ Custom property | Description | Default
 
       .facetLabel{
         width: 30%;
+        transform: translateY(6px);
       }
     </style>
     <div class="curator-container">
@@ -127,7 +128,7 @@ Custom property | Description | Default
               ALPHABETICAL
             </paper-radio-button>
             <paper-radio-button name="probability" title="PROBABILITY">
-              PROBABILITY
+              BY PROBABILITY
             </paper-radio-button>
           </mdb-radio-list>
         </div>
@@ -139,7 +140,7 @@ Custom property | Description | Default
               <div class='facetLabel'>
                 <span>[[item.label]] ([[item.relevance]]%)</span>
               </div>
-              <mdb-radio-list size="small" data-facet-id$="[[item.id]]" data-facet$="[[item.label]]" selected="[[item.assessment]]" on-paper-radio-group-changed="_facetRecommendationChanged">
+              <mdb-radio-list size="large" data-facet-id$="[[item.id]]" data-facet$="[[item.label]]" selected="[[item.assessment]]" on-paper-radio-group-changed="_facetRecommendationChanged">
                 <paper-radio-button name="Y" title="YES">
                   &#x2713;
                 </paper-radio-button>
