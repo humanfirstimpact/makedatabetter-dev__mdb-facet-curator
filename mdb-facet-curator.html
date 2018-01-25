@@ -29,6 +29,8 @@ Custom property | Description | Default
       :host {
         display: block;
         padding: var(--standard-padding, 20px);
+        color: var(--mdb-secondary-text-dark, #000);
+        font-size: var(--mdb-medium-font, 14px);
         --paper-checkbox-label-color: var(--mdb-secondary-text-dark, #000);
         @apply(--paper-font-common-base);
       }
@@ -37,9 +39,9 @@ Custom property | Description | Default
         padding-top: 12px;
         padding-bottom: 12px;
         padding-left: 20px;
-        border-bottom: 1px solid #e3e9ef;
+        border-bottom: 1px solid var(--mdb-border-color, #000);
         @apply(--layout);
-        
+
         @apply(--mdb-facet-container);
         color: var(--mdb-secondary-text-dark, #000);
         width: 100%;
@@ -52,20 +54,18 @@ Custom property | Description | Default
       }
 
       :host .curator-container {
-        border: 1px solid #e3e9ef;
+        border: 1px solid var(--mdb-border-color, #000);
       }
 
       :host .action-bar {
-        border-bottom: 1px solid #e3e9ef;
-        padding-left: 15px;
-        height: 46px;
+        @apply(--layout);
+        @apply(--layout-center);
+        border-bottom: 1px solid var(--mdb-border-color, #000);
+        padding: 10px 20px;
       }
 
       :host .action-item {
-        display: inline;
-        position: relative;
-        top: 32%;
-        margin-right: 5px;
+        margin-right: 10px;
       }
 
       :host .seperator {
@@ -84,22 +84,14 @@ Custom property | Description | Default
         }
       }
 
-      :host mdb-radio-list iron-icon {
-        --iron-icon-width: 18px;
-        --iron-icon-height: 18px;
-      }
 
-      :host paper-radio-button {
-        display: inline;
-      }
-
-      :host mdb-radio-list {
-        display: inline;
-      }
-
-      .facetLabel{
+      .facetLabel {
         width: 30%;
         transform: translateY(6px);
+      }
+
+      paper-radio-button[checked] iron-icon {
+        fill: white;
       }
     </style>
     <div class="curator-container">
@@ -142,13 +134,13 @@ Custom property | Description | Default
               </div>
               <mdb-radio-list size="large" data-facet-id$="[[item.id]]" data-facet$="[[item.label]]" selected="[[item.assessment]]" on-paper-radio-group-changed="_facetRecommendationChanged">
                 <paper-radio-button name="Y" title="YES">
-                  &#x2713;
+                  <iron-icon icon="check"></iron-icon>
                 </paper-radio-button>
                 <paper-radio-button name="N" title="NO">
-                  &#x2717;
+                  <iron-icon icon="clear"></iron-icon>
                 </paper-radio-button>
                 <paper-radio-button name="M" title="MAYBE">
-                  ?
+                  <iron-icon icon="help-outline"></iron-icon>
                 </paper-radio-button>
               </mdb-radio-list>
             </div>
