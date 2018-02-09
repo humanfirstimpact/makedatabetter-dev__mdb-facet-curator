@@ -29,8 +29,9 @@ Custom property | Description | Default
       :host {
         display: block;
         color: var(--mdb-secondary-text-dark, #000);
+        --iron-icon-fill-color: currentColor;
+
         font-size: var(--mdb-medium-font, 14px);
-        --paper-checkbox-label-color: var(--mdb-secondary-text-dark, #000);
         @apply(--paper-font-common-base);
       }
 
@@ -87,10 +88,6 @@ Custom property | Description | Default
       .facetLabel {
         width: 30%;
         transform: translateY(6px);
-      }
-
-      paper-radio-button[checked] iron-icon {
-        fill: white;
       }
     </style>
     <div class="curator-container">
