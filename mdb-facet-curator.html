@@ -61,7 +61,7 @@ Custom property | Description | Default
         @apply(--layout);
         @apply(--layout-center);
         border-bottom: 1px solid var(--mdb-border-color, #000);
-        padding: 10px 20px;
+        padding: 0px 15px;
       }
 
       :host .action-item {
@@ -77,8 +77,8 @@ Custom property | Description | Default
       }
 
       :host mdb-search-box {
-        padding-top: 20px;
-        padding-bottom: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
         --mdb-search-box-container: {
           margin: 0;
         }
@@ -104,6 +104,13 @@ Custom property | Description | Default
         font-size: 20px;
         font-weight: 400;
       }
+
+      :host mdb-search-box{
+          margin-left: auto;
+          --standard-padding:{
+              margin: 0px;
+          }
+      }
     </style>
     <div class="curator-container">
       <div class="action-bar">
@@ -126,7 +133,7 @@ Custom property | Description | Default
         </div>
         <div class="action-item seperator">Sort by</div>
         <div class="action-item">
-          <mdb-radio-list size="small" selected="{{sortBy}}" on-paper-radio-group-changed="_facetSortChanged">
+          <mdb-radio-list size="small" selected="{{sortBy}}" on-paper-radio-group-changed="_facetFilterChanged">
             <paper-radio-button name="alphabetical" title="ALPHABETICAL">
               ALPHABETICALLY
             </paper-radio-button>
@@ -135,6 +142,7 @@ Custom property | Description | Default
             </paper-radio-button>
           </mdb-radio-list>
         </div>
+        <mdb-search-box show-search-controls on-search-term-entered='_handleSearchTerm' placeholder="Search for [[facetType]]"></mdb-search-box>
       </div>
       <template is='dom-if' if='[[_areFacetsEmpty(facets)]]'>
         <div class="empty-message">
@@ -199,6 +207,10 @@ Custom property | Description | Default
           value: []
         },
 
+        _searchTerm: {
+          type: String
+        },
+
         emptyMessage: {
           type: String,
           value: 'No items found'
@@ -227,17 +239,12 @@ Custom property | Description | Default
         });
       },
 
-      _facetFilterChanged: function (e) {
+      _facetFilterChanged: function(){
         this.fire('facet-filter-changed', {
-          filter: e.currentTarget.selected,
-          facetType: this.facetType
-        });
-      },
-
-      _facetSortChanged: function (e) {
-        this.fire('facet-sort-changed', {
-          filter: e.currentTarget.selected,
-          facetType: this.facetType
+          facetType: this.facetType,
+          searchTerm: this._searchTerm,
+          sortBy :  this.sortBy,
+          filterBy: this.filterBy
         });
       },
 
@@ -251,6 +258,11 @@ Custom property | Description | Default
 
       _areFacetsEmpty: function(){
         return (this.facets || []).length == 0;
+      },
+
+      _handleSearchTerm: function(e){
+        this._searchTerm = e.detail.searchTerm;
+        this._facetFilterChanged();
       }
     });
   </script>
