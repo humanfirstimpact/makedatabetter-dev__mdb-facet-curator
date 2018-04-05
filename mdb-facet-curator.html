@@ -152,11 +152,11 @@ Custom property | Description | Default
       <div class="facet-list">
         <template is="dom-if" if="[[facets.length]]">
           <template is="dom-repeat" items="{{facets}}">
-            <div class$="{{getRowHighlightClass(item.assessment)}}">
+            <div class$="{{getRowHighlightClass(item.currentAssessment)}}">
               <div class='facetLabel'>
                 <span>[[item.label]] ([[item.relevance]]%)</span>
               </div>
-              <mdb-radio-list size="large" data-facet-id$="[[item.id]]" data-facet$="[[item.label]]" selected="[[item.assessment]]" on-paper-radio-group-changed="_facetRecommendationChanged">
+              <mdb-radio-list size="large" data-facet-id$="[[item.id]]" data-facet$="[[item.label]]" selected="{{item.currentAssessment}}" on-paper-radio-group-changed="_facetRecommendationChanged">
                 <paper-radio-button name="Y" title="YES">
                   <iron-icon icon="check"></iron-icon>
                 </paper-radio-button>
@@ -204,7 +204,8 @@ Custom property | Description | Default
 
         facets: {
           type: Array,
-          value: []
+          value: [],
+          observer: '_facetsChanged'
         },
 
         _searchTerm: {
@@ -222,7 +223,7 @@ Custom property | Description | Default
       },
 
       getRowHighlightClass: function (assessment) {
-        if (assessment && assessment == "M") {
+        if (assessment && assessment.toLowerCase() == "m") {
           return 'facet highlight';
         }
         return 'facet';
@@ -263,6 +264,12 @@ Custom property | Description | Default
       _handleSearchTerm: function(e){
         this._searchTerm = e.detail.searchTerm;
         this._facetFilterChanged();
+      },
+
+      _facetsChanged: function(){
+        (this.facets || []).forEach(function(facet){
+          facet.currentAssessment = facet.assessment;
+        });
       }
     });
   </script>
