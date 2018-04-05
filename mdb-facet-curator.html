@@ -116,7 +116,7 @@ Custom property | Description | Default
       <div class="action-bar">
         <div class="action-item">Show</div>
         <div class="action-item">
-          <mdb-radio-list size="small" selected="{{filterBy}}" on-paper-radio-group-changed="_facetFilterChanged">
+          <mdb-radio-list size="small" selected="{{filterBy}}">
             <paper-radio-button name="yes" title="YES">
               YES
             </paper-radio-button>
@@ -133,7 +133,7 @@ Custom property | Description | Default
         </div>
         <div class="action-item seperator">Sort by</div>
         <div class="action-item">
-          <mdb-radio-list size="small" selected="{{sortBy}}" on-paper-radio-group-changed="_facetFilterChanged">
+          <mdb-radio-list size="small" selected="{{sortBy}}">
             <paper-radio-button name="alphabetical" title="ALPHABETICAL">
               ALPHABETICALLY
             </paper-radio-button>
@@ -193,13 +193,15 @@ Custom property | Description | Default
         filterBy: {
           type: String,
           value: 'all',
-          reflectToAttribute: true
+          reflectToAttribute: true,
+          observer: '_filterChanged'
         },
         /** possible values: alphabetical, probability */
         sortBy: {
           type: String,
           //value: 'alphabetical',
-          reflectToAttribute: true
+          reflectToAttribute: true,
+          observer: '_filterChanged'
         },
 
         facets: {
@@ -209,7 +211,8 @@ Custom property | Description | Default
         },
 
         _searchTerm: {
-          type: String
+          type: String,
+          observer: '_filterChanged'
         },
 
         emptyMessage: {
@@ -263,13 +266,16 @@ Custom property | Description | Default
 
       _handleSearchTerm: function(e){
         this._searchTerm = e.detail.searchTerm;
-        this._facetFilterChanged();
       },
 
       _facetsChanged: function(){
         (this.facets || []).forEach(function(facet){
           facet.currentAssessment = facet.assessment;
         });
+      },
+
+      _filterChanged: function(){
+        this._facetFilterChanged();
       }
     });
   </script>
