@@ -266,6 +266,9 @@ Custom property | Description | Default
 
       _handleSearchTerm: function(e){
         this._searchTerm = e.detail.searchTerm;
+        this.fire('search-term-changed', {
+          searchTerm: this._searchTerm
+        });
       },
 
       _facetsChanged: function(){
@@ -276,6 +279,10 @@ Custom property | Description | Default
 
       _filterChanged: function(){
         this._facetFilterChanged();
+      },
+
+      raiseFilterChangedEvent: function(){
+        this._filterChanged();
       }
     });
   </script>
