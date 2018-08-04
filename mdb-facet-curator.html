@@ -177,7 +177,7 @@ Custom property | Description | Default
           <template is="dom-repeat" items="{{facets}}">
             <div class$="{{getRowHighlightClass(item.currentAssessment)}}">
               <div class='facetLabel'>
-                <span>[[item.label]] <template is='dom-if' if='[[item.relevance]]'>([[item.relevance]]%)</template></span>
+                <span>[[item.label]] <template is='dom-if' if='[[item.relevance]]'>([[_getRoundedValue(item.relevance)]]%)</template></span>
               </div>
               <mdb-radio-list size="large" data-facet-id$="[[item.id]]" data-facet$="[[item.label]]" selected="{{item.currentAssessment}}" on-paper-radio-group-changed="_facetRecommendationChanged">
                 <paper-radio-button name="Y" title="YES">
@@ -306,6 +306,13 @@ Custom property | Description | Default
 
       raiseFilterChangedEvent: function(){
         this._filterChanged();
+      },
+
+      _getRoundedValue: function(value){
+        if(value == null || value == undefined || isNaN(value))
+          return value;
+
+        return Number(value).toFixed(2);
       }
     });
   </script>
